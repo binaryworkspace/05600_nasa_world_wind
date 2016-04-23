@@ -1,4 +1,15 @@
+# Directory #
+bin/
+log/
+target/
+.settings/
+
+# Project Files #
 *.class
+*.log
+.classpath
+.project
+.DS_Store
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

@@ -1,0 +1,256 @@
+<?xml version="1.0" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<organization>
+		<name>Binary Workspace</name>
+		<url>http://www.binaryworkspace.com</url>
+	</organization>
+
+	<properties>
+		<!--eclipse properties -->
+		<downloadSources>false</downloadSources>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<groupId>com.binaryworkspace.jogl</groupId>
+	<artifactId>05610-nasa-world-wind-sandbox</artifactId>
+	<name>05610-nasa-world-wind-sandbox</name>
+	<description>Sandbox for testing Nasa World Wind with Swing and JavaFX</description>
+	<packaging>jar</packaging>
+	<version>1.0.0</version>
+
+	<!-- ********************************************************************************************** -->
+	<!-- Dependencies Common To All Projects -->
+	<!-- ********************************************************************************************** -->
+	<dependencies>
+
+		<dependency>
+			<groupId>gov.nasa</groupId>
+			<artifactId>worldwind</artifactId>
+			<version>2.0.0-986</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jogamp.gluegen</groupId>
+			<artifactId>gluegen-rt-main</artifactId>
+			<version>2.1.5-01</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jogamp.jogl</groupId>
+			<artifactId>jogl-all-main</artifactId>
+			<version>2.1.5-01</version>
+		</dependency>
+
+		<dependency>
+			<groupId>gov.nasa</groupId>
+			<artifactId>worldwindx</artifactId>
+			<version>2.0.0-986</version>
+		</dependency>
+
+		<!-- Test scope -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<!-- ********************************************************************************************** -->
+	<!-- Developer Contact Information -->
+	<!-- ********************************************************************************************** -->
+	<developers>
+		<developer>
+			<name>Chris Ludka</name>
+			<id>1</id>
+			<email>binaryworkspace@gmail.com</email>
+			<organization>Binary Workspace</organization>
+		</developer>
+	</developers>
+
+	<!-- ********************************************************************************************** -->
+	<!-- Deployment -->
+	<!-- ********************************************************************************************** -->
+	<!-- NOTE: Deploying an artifact should be done only when a new snapshot 
+		or release version of an artifact is to be made available. The command > 
+		mvn deploy will push the artifact to the local internal repository. -->
+	<distributionManagement>
+
+	</distributionManagement>
+
+	<!-- ********************************************************************************************** -->
+	<!-- Configure Build -->
+	<!-- ********************************************************************************************** -->
+	<build>
+		<defaultGoal>install</defaultGoal>
+
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh</artifactId>
+				<version>1.0-beta-2</version>
+			</extension>
+		</extensions>
+
+		<pluginManagement>
+			<plugins>
+
+				<plugin>
+					<artifactId>maven-clean-plugin</artifactId>
+					<configuration>
+						<filesets>
+							<fileset>
+								<directory>
+									./
+								</directory>
+								<includes>
+									<include>.dep-build.txt</include>
+								</includes>
+							</fileset>
+						</filesets>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>2.0</version>
+					<configuration>
+						<webappDirectory>
+							target/${project.artifactId}
+						</webappDirectory>
+						<warName>${project.artifactId}</warName>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-site-plugin</artifactId>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<configuration>
+						<childDelegation>true</childDelegation>
+						<!-- =========================================================================== 
+							Uncomment the below property to make tests wait for a debugger to connect 
+							============================================================================ -->
+						<!-- <debugForkedProcess>true</debugForkedProcess> -->
+						<forkedProcessTimeoutInSeconds>
+							120
+						</forkedProcessTimeoutInSeconds>
+						<forkMode>once</forkMode>
+						<redirectTestOutputToFile>
+							true
+						</redirectTestOutputToFile>
+						<trimStackTrace>false</trimStackTrace>
+						<parallel>false</parallel>
+						<includes>
+							<include>**/*Test.java</include>
+						</includes>
+						<excludes>
+							<exclude>**/Base*.java</exclude>
+							<exclude>**/*TestWS.java</exclude>
+						</excludes>
+						<argLine>-Xmx512M</argLine>
+					</configuration>
+				</plugin>
+
+			</plugins>
+		</pluginManagement>
+
+
+		<plugins>
+			<!-- Attaches a source jar to the project -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1.2</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+
+
+
+
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.java</include>
+				</includes>
+			</resource>
+		</resources>
+
+
+	</build>
+
+	<!-- ********************************************************************************************** -->
+	<!-- Configure Project Specific Profiles -->
+	<!-- ********************************************************************************************** -->
+	<profiles>
+	</profiles>
+
+	<!-- ********************************************************************************************** -->
+	<!-- Configure reporting -->
+	<!-- ********************************************************************************************** -->
+	<reporting>
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.8.1</version>
+				<configuration>
+					<aggregate>true</aggregate>
+					<maxmemory>512m</maxmemory>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<aggregate>true</aggregate>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>2.12.2</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jdepend-maven-plugin</artifactId>
+				<version>2.9.1</version>
+			</plugin>
+
+		</plugins>
+	</reporting>
+</project>
+
